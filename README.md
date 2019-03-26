@@ -82,7 +82,7 @@ elements for sorting
 ### sortString: 
 a list of field names of element, such as "-score,index,-name", for this sortString, which means the element will be ordered by "score desc, index asc, name desc"
 #### isNullFirst: 
-if true, if the value of the field is null, it will be arranged firstly. if false,  if the value of the field is null, it will be arranged at last.
+if true, if the value of the field is null, then it will be arranged firstly. if false,  if the value of the field is null, then it will be arranged at last.
 
 	
 
