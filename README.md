@@ -78,11 +78,17 @@ there is only one class "EasySorter", and there is only one method for sorting a
 public static <T> List<T> sort(List<T> source, String sortString, boolean isNullFirst)
 ```
 #### source: 
+```
 elements for sorting
+```
 ### sortString: 
+```
 a list of field names of element, such as "-score,index,-name", for this sortString, which means the element will be ordered by "score desc, index asc, name desc"
-#### isNullFirst: 
+```
+#### isNullFirst:
+```
 if true, if the value of the field is null, then it will be arranged firstly. if false,  if the value of the field is null, then it will be arranged at last.
+```
 
 	
 
