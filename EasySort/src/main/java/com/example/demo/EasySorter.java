@@ -1,3 +1,22 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * @author  Aiyun Tang
+ * @mail aiyun.tang@gmail.com
+ */
+
 package com.example.demo;
 
 import java.util.ArrayList;
@@ -10,9 +29,9 @@ import lombok.Data;
 public class EasySorter {
 	/**
 	 * 
-	 * @param source µÈ´ıÅÅĞòµÄ¶ÓÁĞ
-	 * @param sortString ÅÅĞò±í´ïÊ½£¬ÊôĞÔÃû³ÆÒÔ¶ººÅ·Ö¸ô£¬Ç°´ø¼õºÅ"-"±íÊ¾ÄæĞò
-	 * @param isNullFirst Èç¹ûÊôĞÔÖµÎªnullÊÇ·ñÅÅ×îÇ°Ãæ£¬ÒªÃ´ÅÅ×îºóÃæ
+	 * @param source ç­‰å¾…æ’åºçš„é˜Ÿåˆ—
+	 * @param sortString æ’åºè¡¨è¾¾å¼ï¼Œå±æ€§åç§°ä»¥é€—å·åˆ†éš”ï¼Œå‰å¸¦å‡å·"-"è¡¨ç¤ºé€†åº
+	 * @param isNullFirst å¦‚æœå±æ€§å€¼ä¸ºnullæ˜¯å¦æ’æœ€å‰é¢ï¼Œè¦ä¹ˆæ’æœ€åé¢
 	 * @return
 	 */
 	public static <T> List<T> sort(List<T> source, String sortString, boolean isNullFirst) {
@@ -46,11 +65,11 @@ public class EasySorter {
 	}
 
 	/**
-	 * ¸ù¾İÊôĞÔÃû³Æ»ñÈ¡¶ÔÏóÊôĞÔÖµ
+	 * æ ¹æ®å±æ€§åç§°è·å–å¯¹è±¡å±æ€§å€¼
 	 * 
-	 * @param object ÊôĞÔÄ¿±ê¶ÔÏó
-	 * @param name ÊôĞÔÃû
-	 * @return ÊôĞÔÖµ
+	 * @param object å±æ€§ç›®æ ‡å¯¹è±¡
+	 * @param name å±æ€§å
+	 * @return å±æ€§å€¼
 	 * @throws Exception
 	 */
 	private static Object getByGetMethod(Object object, String fieldName) {
