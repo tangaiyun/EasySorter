@@ -59,3 +59,13 @@ public class EasySorterTest {
 	}
 }
 ```
+the output is:
+```
+EasySorterTest.MyBean(name=G, score=98, index=3)
+EasySorterTest.MyBean(name=A, score=98, index=3)
+EasySorterTest.MyBean(name=E, score=98, index=null)
+EasySorterTest.MyBean(name=D, score=89, index=1)
+EasySorterTest.MyBean(name=F, score=89, index=6)
+EasySorterTest.MyBean(name=B, score=67, index=5)
+EasySorterTest.MyBean(name=C, score=null, index=4)
+```
