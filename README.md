@@ -25,6 +25,9 @@ Then create a Spring boot API project refer to sample project "demo1"，and you 
 ### Usage
 please refer to the EasySorterTest.java
 ``` java
+
+import com.example.demo.EasySorter;
+
 public class EasySorterTest {
 	@Data
 	@AllArgsConstructor
