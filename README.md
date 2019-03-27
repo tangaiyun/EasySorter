@@ -1,5 +1,5 @@
 # EasySorter
-a very powerful utility for sorting a list of elements order by fieds of the element 
+a very powerful utility for sorting a list of elements with order by assigned fields of the element 
 
 
 ## Quickstart
@@ -12,7 +12,7 @@ mvn clean install
 ```
 
 ### Add to your POM
-Then create a Spring boot API project refer to sample project "demo1"，and you need to add dependency in pom.xml
+Then create a Maven project，and you need to add dependency in your pom.xml
 
 ``` xml
         <dependency>
