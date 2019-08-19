@@ -1,5 +1,5 @@
 # EasySorter
-a very powerful utility for sorting a list of elements with order by assigned fields of the element 
+a powerful "scala like" utility for sorting a list of elements with order by assigned fields of the element 
 
 
 ## Quickstart
