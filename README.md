@@ -16,7 +16,7 @@ Then create a Maven project，and you need to add dependency in your pom.xml
 
 ``` xml
         <dependency>
-            <groupId>com.example</groupId>
+            <groupId>com.tay.sort</groupId>
             <artifactId>EasySort</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -26,7 +26,7 @@ Then create a Maven project，and you need to add dependency in your pom.xml
 please refer to the EasySorterTest.java
 ``` java
 
-import com.example.demo.EasySorter;
+import com.tay.sort.EasySorter;
 
 public class EasySorterTest {
 	@Data
