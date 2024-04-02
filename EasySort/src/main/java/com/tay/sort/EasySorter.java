@@ -23,50 +23,42 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /**
  * 改进的简易排序器，支持基于多个字段的复合排序。
+ * 支持null值处理，允许对每个排序规则指定null值是排在前面还是后面。
  */
 public class EasySorter {
-
 
     /**
      * 对列表进行排序。
      *
-     * @param source     待排序的列表
-     * @param sortRules  排序规则列表，每个规则指定一个排序字段和方向
-     * @param isNullFirst 是否将null值排在前面
-     * @param <T>        列表中元素的类型
-     * @return           排序后的列表
+     * @param source    待排序的列表
+     * @param sortRules 排序规则列表，每个规则指定一个排序字段和方向
+     * @param <T>       列表中元素的类型
+     * @return 排序后的列表
      */
-    public static <T> List<T> sort(List<T> source, List<SortRule<T>> sortRules, boolean isNullFirst) {
+    public static <T> List<T> sort(List<T> source, List<SortRule<T>> sortRules) {
         if (source == null || source.isEmpty() || sortRules == null || sortRules.isEmpty()) {
             return source; // 输入列表为空或排序规则为空时，直接返回原列表
         }
 
-        // 基于第一个排序规则创建比较器
         Comparator<T> comparator = null;
 
-        // 循环构建基于每个排序规则的比较器，并将它们组合起来
         for (SortRule<T> rule : sortRules) {
-            Comparator<T> currentComparator = Comparator.comparing(rule.getKeyExtractor(),
-                    Comparator.nullsFirst(Comparator.naturalOrder()));
+            Comparator<T> currentComparator = null;
+            if (rule.isNullFirst()) {
+                currentComparator = Comparator.comparing(rule.getKeyExtractor(), Comparator.nullsFirst(Comparator.naturalOrder()));
+            }
+            else {
+                currentComparator = Comparator.comparing(rule.getKeyExtractor(), Comparator.nullsLast(Comparator.naturalOrder()));
+            }
             if (rule.isDesc()) {
                 currentComparator = currentComparator.reversed();
-            }
-            if (!isNullFirst) {
-                currentComparator = Comparator.comparing(rule.getKeyExtractor(),
-                        Comparator.nullsLast(Comparator.naturalOrder()));
-                if (rule.isDesc()) {
-                    currentComparator = currentComparator.reversed();
-                }
             }
 
             comparator = (comparator == null) ? currentComparator : comparator.thenComparing(currentComparator);
         }
 
-        // 使用构建的比较器对源列表进行排序，并返回排序后的列表
         return source.stream().sorted(comparator).collect(Collectors.toList());
     }
-
 }
