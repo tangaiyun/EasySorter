@@ -19,110 +19,54 @@
 
 package com.tay.sort;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
+/**
+ * 改进的简易排序器，支持基于多个字段的复合排序。
+ */
 public class EasySorter {
-	/**
-	 * 
-	 * @param source 等待排序的队列
-	 * @param sortString 排序表达式，属性名称以逗号分隔，前带减号"-"表示逆序
-	 * @param isNullFirst 如果属性值为null是否排最前面，要么排最后面
-	 * @return
-	 */
-	public static <T> List<T> sort(List<T> source, String sortString, boolean isNullFirst) {
-		if (source == null || source.size() == 0) {
-			return source;
-		}
-		if (sortString == null || sortString.length() == 0) {
-			return source;
-		} else {
-			String[] sortFields = sortString.split(",");
-			List<Comparator<T>> comparatorList = new ArrayList<>();
-			for (String field : sortFields) {
-				String fieldRemovedSpace = field.replaceAll(" ", "");
-				boolean isStartWithMinus = fieldRemovedSpace.startsWith("-");
-				String realField = fieldRemovedSpace;
-				if (isStartWithMinus) {
-					realField = fieldRemovedSpace.substring(1);
-				}
-				Comparator<T> comparator = new FieldComparator<T>(realField, isStartWithMinus, isNullFirst);
-				comparatorList.add(comparator);
-			}
 
-			Comparator<T> first = comparatorList.get(0);
-			for (int i = 1; i < comparatorList.size(); i++) {
-				first = first.thenComparing(comparatorList.get(i));
-			}
-			List<T> result = new ArrayList<T>(source);
-			result.sort(first);
-			return result;
-		}
-	}
 
-	/**
-	 * 根据属性名称获取对象属性值
-	 * 
-	 * @param object 属性目标对象
-	 * @param fieldName 属性名
-	 * @return 属性值
-	 * @throws Exception
-	 */
-	private static Object getByGetMethod(Object object, String fieldName) {
-		String methodName = getMethodNameByFieldName(fieldName);
-		try {
-			return object.getClass().getMethod(methodName, null).invoke(object);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    /**
+     * 对列表进行排序。
+     *
+     * @param source     待排序的列表
+     * @param sortRules  排序规则列表，每个规则指定一个排序字段和方向
+     * @param isNullFirst 是否将null值排在前面
+     * @param <T>        列表中元素的类型
+     * @return           排序后的列表
+     */
+    public static <T> List<T> sort(List<T> source, List<SortRule<T>> sortRules, boolean isNullFirst) {
+        if (source == null || source.isEmpty() || sortRules == null || sortRules.isEmpty()) {
+            return source; // 输入列表为空或排序规则为空时，直接返回原列表
+        }
 
-	private static String getMethodNameByFieldName(String field) {
-		String firstLetter = field.substring(0, 1);
-		String left = field.substring(1);
-		return "get" + firstLetter.toUpperCase() + left;
-	}
+        // 基于第一个排序规则创建比较器
+        Comparator<T> comparator = null;
 
-	@Data
-	@AllArgsConstructor
-	static class FieldComparator<T> implements Comparator<T> {
-		private String field;
-		private boolean isDesc;
-		private boolean isNullFirst;
+        // 循环构建基于每个排序规则的比较器，并将它们组合起来
+        for (SortRule<T> rule : sortRules) {
+            Comparator<T> currentComparator = Comparator.comparing(rule.getKeyExtractor(),
+                    Comparator.nullsFirst(Comparator.naturalOrder()));
+            if (rule.isDesc()) {
+                currentComparator = currentComparator.reversed();
+            }
+            if (!isNullFirst) {
+                currentComparator = Comparator.comparing(rule.getKeyExtractor(),
+                        Comparator.nullsLast(Comparator.naturalOrder()));
+                if (rule.isDesc()) {
+                    currentComparator = currentComparator.reversed();
+                }
+            }
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
-		@Override
-		public int compare(Object o1, Object o2) {
-			Comparable first = (Comparable) getByGetMethod(o1, field);
-			Comparable second = (Comparable) getByGetMethod(o2, field);
-			if (isNullFirst) {
-				if (first == null && second == null) {
-					return 0;
-				} else if (first == null && second != null) {
-					return -1;
-				} else if (first != null && second == null) {
-					return 1;
-				}
-			}
-			else {
-				if (first == null && second == null) {
-					return 0;
-				} else if (first == null && second != null) {
-					return 1;
-				} else if (first != null && second == null) {
-					return -1;
-				}
-			}
-			if (isDesc) {
-				return second.compareTo(first);
-			} else {
-				return first.compareTo(second);
-			}
-		}
-	}
+            comparator = (comparator == null) ? currentComparator : comparator.thenComparing(currentComparator);
+        }
 
-	}
+        // 使用构建的比较器对源列表进行排序，并返回排序后的列表
+        return source.stream().sorted(comparator).collect(Collectors.toList());
+    }
+
+}
