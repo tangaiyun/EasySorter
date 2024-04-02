@@ -1,28 +1,15 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * @author  Aiyun Tang
- * @mail aiyun.tang@gmail.com
- */
 package com.tay.sort;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.tay.sort.EasySorter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
+// 假设EasySorterImproved类已经定义好了，如前面的实现
 
 public class EasySorterTest {
 	@Data
@@ -50,10 +37,16 @@ public class EasySorterTest {
 		list.add(e);
 		list.add(f);
 		list.add(g);
-	
-		List<MyBean> result = EasySorter.sort(list, "-score,index,-name", false);
+
+		List<SortRule<MyBean>> sortRules = Arrays.asList(
+				new SortRule<>(MyBean::getScore, true), // 按 score 降序
+				new SortRule<>(MyBean::getIndex, false), // 按 index 升序
+				new SortRule<>(MyBean::getName, false) // 按 index 升序
+		);
+
+		// 根据新的API调用排序方法
+		List<MyBean> result = EasySorter.sort(list, sortRules, true); // 假设我们想要升序，nulls first
 
 		result.forEach(System.out::println);
-
 	}
 }
